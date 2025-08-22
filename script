@@ -1,0 +1,615 @@
+-- OG Cosmos Hub
+-- Made by Cosmos#5091
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Admins = {"AdminUsername1", "AdminUsername2"} -- Add admin usernames here
+
+-- Load OG Cosmos Hub UI Library
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local Window = Library.CreateLib("Welcome To Cosmos Hub - By Cosmos#5091", "DarkTheme")
+
+-- Function to check if player is an admin
+local function isAdmin(player)
+    for _, admin in pairs(Admins) do
+        if player.Name == admin then
+            return true
+        end
+    end
+    return false
+end
+
+-- Create Tabs
+local AdminTab = Window:NewTab("Admin Commands")
+local GamesTab = Window:NewTab("Games")
+local MoreTab = Window:NewTab("More")
+local InfoTab = Window:NewTab("Info")
+
+-- Admin Commands Section
+local AdminSection = AdminTab:NewSection("Commands")
+
+-- Toggle Functions
+local toggles = {}
+local function toggleFeature(name, enableFunc, disableFunc)
+    if toggles[name] then
+        disableFunc()
+        toggles[name] = false
+    else
+        enableFunc()
+        toggles[name] = true
+    end
+end
+
+-- Fly
+AdminSection:NewToggle("Fly", "Toggle flying ability", function(state)
+    if state then
+        loadstring(game:HttpGet("https://pastebin.com/raw/YwwvHbTq"))()
+    else
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.PlatformStand = false
+        end
+    end
+end)
+
+-- ESP
+AdminSection:NewToggle("ESP", "Toggle ESP for players", function(state)
+    if state then
+        loadstring(game:HttpGet("https://pastebin.com/raw/FsJak6AT"))()
+    else
+        for _, v in pairs(game.CoreGui:GetChildren()) do
+            if v.Name == "ESP" then
+                v:Destroy()
+            end
+        end
+    end
+end)
+
+-- Noclip
+AdminSection:NewToggle("Noclip", "Walk through walls", function(state)
+    if state then
+        loadstring(game:HttpGet("https://pastebin.com/raw/MHE8bZVq"))()
+    else
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+        end
+    end
+end)
+
+-- Aimbot
+AdminSection:NewToggle("Aimbot", "Enable aimbot", function(state)
+    if state then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-Script/main/Aimbot%20Script.lua", true))()
+    else
+        getgenv().AimbotSettings = nil
+    end
+end)
+
+-- Command Functions
+local function jump(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.Jump = true
+    end
+end
+
+local function kill(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.Health = 0
+    end
+end
+
+local function loopKill(player)
+    local loop = toggles["LoopKill_" .. player.Name]
+    if loop then
+        toggles["LoopKill_" .. player.Name] = false
+    else
+        toggles["LoopKill_" .. player.Name] = true
+        coroutine.wrap(function()
+            while toggles["LoopKill_" .. player.Name] do
+                if player.Character and player.Character:FindFirstChild("Humanoid") then
+                    player.Character.Humanoid.Health = 0
+                end
+                wait(0.5)
+            end
+        end)()
+    end
+end
+
+local function sparkles(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local sparklesEffect = Instance.new("ParticleEmitter")
+        sparklesEffect.Texture = "rbxassetid://102604810"
+        sparklesEffect.Parent = player.Character.HumanoidRootPart
+        sparklesEffect.Name = "SparklesEffect"
+    end
+end
+
+local function unsparkles(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local sparklesEffect = player.Character.HumanoidRootPart:FindFirstChild("SparklesEffect")
+        if sparklesEffect then
+            sparklesEffect:Destroy()
+        end
+    end
+end
+
+local function forceField(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local forceFieldPart = Instance.new("Part")
+        forceFieldPart.Shape = Enum.PartType.Ball
+        forceFieldPart.Size = Vector3.new(6, 6, 6)
+        forceFieldPart.CFrame = player.Character.HumanoidRootPart.CFrame
+        forceFieldPart.Anchored = true
+        forceFieldPart.CanCollide = false
+        forceFieldPart.Transparency = 0.5
+        forceFieldPart.BrickColor = BrickColor.new("Cyan")
+        forceFieldPart.Parent = player.Character
+        forceFieldPart.Name = "ForceField"
+    end
+end
+
+local function unforceField(player)
+    if player.Character and player.Character:FindFirstChild("ForceField") then
+        player.Character.ForceField:Destroy()
+    end
+end
+
+local function fire(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local fireEffect = Instance.new("Fire")
+        fireEffect.Parent = player.Character.HumanoidRootPart
+        fireEffect.Name = "FireEffect"
+    end
+end
+
+local function unfire(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local fireEffect = player.Character.HumanoidRootPart:FindFirstChild("FireEffect")
+        if fireEffect then
+            fireEffect:Destroy()
+        end
+    end
+end
+
+local function smoke(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local smokeEffect = Instance.new("Smoke")
+        smokeEffect.Parent = player.Character.HumanoidRootPart
+        smokeEffect.Name = "SmokeEffect"
+    end
+end
+
+local function unsmoke(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local smokeEffect = player.Character.HumanoidRootPart:FindFirstChild("SmokeEffect")
+        if smokeEffect then
+            smokeEffect:Destroy()
+        end
+    end
+end
+
+local function miniHead(player)
+    if player.Character and player.Character:FindFirstChild("Head") then
+        player.Character.Head.Size = Vector3.new(1, 1, 1)
+    end
+end
+
+local function bigHead(player)
+    if player.Character and player.Character:FindFirstChild("Head") then
+        player.Character.Head.Size = Vector3.new(3, 3, 3)
+    end
+end
+
+local function normalHead(player)
+    if player.Character and player.Character:FindFirstChild("Head") then
+        player.Character.Head.Size = Vector3.new(2, 2, 2)
+    end
+end
+
+local function trip(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.WalkSpeed = 0
+        wait(3)
+        player.Character.Humanoid.WalkSpeed = 16
+    end
+end
+
+local function sit(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Seated)
+    end
+end
+
+local function invisible(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.Transparency = 1
+        for _, part in pairs(player.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Transparency = 1
+            end
+        end
+    end
+end
+
+local function visible(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character.HumanoidRootPart.Transparency = 0
+        for _, part in pairs(player.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Transparency = 0
+            end
+        end
+    end
+end
+
+local function freeze(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.WalkSpeed = 0
+        player.Character.Humanoid.JumpPower = 0
+    end
+end
+
+local function unfreeze(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.WalkSpeed = 16
+        player.Character.Humanoid.JumpPower = 50
+    end
+end
+
+local function explode(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local explosion = Instance.new("Explosion")
+        explosion.Position = player.Character.HumanoidRootPart.Position
+        explosion.Parent = game.Workspace
+    end
+end
+
+local function merge(player1, player2)
+    if player1.Character and player1.Character:FindFirstChild("HumanoidRootPart") and player2.Character and player2.Character:FindFirstChild("HumanoidRootPart") then
+        player2.Character.HumanoidRootPart.CFrame = player1.Character.HumanoidRootPart.CFrame
+    end
+end
+
+local function control(player1, player2)
+    -- Complex control logic here (requires more advanced scripting)
+end
+
+local function giveTools(player)
+    if player.Backpack then
+        local starterPack = game:GetService("StarterPack"):GetChildren()
+        for _, tool in pairs(starterPack) do
+            tool:Clone().Parent = player.Backpack
+        end
+    end
+end
+
+local function removeTools(player)
+    if player.Backpack then
+        for _, tool in pairs(player.Backpack:GetChildren()) do
+            if tool:IsA("Tool") then
+                tool:Destroy()
+            end
+        end
+    end
+end
+
+local function jail(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local jailPart = Instance.new("Part")
+        jailPart.Size = Vector3.new(8, 8, 8)
+        jailPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, 0)
+        jailPart.Anchored = true
+        jailPart.CanCollide = true
+        jailPart.Transparency = 0.5
+        jailPart.BrickColor = BrickColor.new("Gray")
+        jailPart.Parent = game.Workspace
+        jailPart.Name = "Jail" .. player.Name
+    end
+end
+
+local function unjail(player)
+    if game.Workspace:FindFirstChild("Jail" .. player.Name) then
+        game.Workspace["Jail" .. player.Name]:Destroy()
+    end
+end
+
+local function godMode(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.MaxHealth = math.huge
+        player.Character.Humanoid.Health = math.huge
+    end
+end
+
+local function ungodMode(player)
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        player.Character.Humanoid.MaxHealth = 100
+        player.Character.Humanoid.Health = 100
+    end
+end
+
+local function kick(player)
+    player:Kick("You have been kicked by an admin.")
+end
+
+local function zombify(player)
+    -- Complex zombie logic here
+end
+
+local function admin(player)
+    table.insert(Admins, player.Name)
+end
+
+local function unadmin(player)
+    for i, v in ipairs(Admins) do
+        if v == player.Name then
+            table.remove(Admins, i)
+            break
+        end
+    end
+end
+
+-- Command Buttons
+AdminSection:NewButton(";jump", "Makes you jump", function() jump(LocalPlayer) end)
+AdminSection:NewButton(";kill", "Kills the player", function() kill(LocalPlayer) end)
+AdminSection:NewButton(";loopkill", "Kills a player over and over", function() loopKill(LocalPlayer) end)
+AdminSection:NewButton(";sparkles", "Adds sparkles effect", function() sparkles(LocalPlayer) end)
+AdminSection:NewButton(";unsparkles", "Removes sparkles effect", function() unsparkles(LocalPlayer) end)
+AdminSection:NewButton(";ff", "Creates a force field", function() forceField(LocalPlayer) end)
+AdminSection:NewButton(";unff", "Removes the force field", function() unforceField(LocalPlayer) end)
+AdminSection:NewButton(";fire", "Sets player on fire", function() fire(LocalPlayer) end)
+AdminSection:NewButton(";unfire", "Stops the fire", function() unfire(LocalPlayer) end)
+AdminSection:NewButton(";smoke", "Adds smoke effect", function() smoke(LocalPlayer) end)
+AdminSection:NewButton(";unsmoke", "Removes smoke effect", function() unsmoke(LocalPlayer) end)
+AdminSection:NewButton(";minihead", "Makes head smaller", function() miniHead(LocalPlayer) end)
+AdminSection:NewButton(";bighead", "Makes head bigger", function() bigHead(LocalPlayer) end)
+AdminSection:NewButton(";normalhead", "Resets head size", function() normalHead(LocalPlayer) end)
+AdminSection:NewButton(";trip", "Trips the player", function() trip(LocalPlayer) end)
+AdminSection:NewButton(";sit", "Forces player to sit", function() sit(LocalPlayer) end)
+AdminSection:NewButton(";invisible", "Makes player invisible", function() invisible(LocalPlayer) end)
+AdminSection:NewButton(";visible", "Makes player visible", function() visible(LocalPlayer) end)
+AdminSection:NewButton(";freeze", "Freezes player", function() freeze(LocalPlayer) end)
+AdminSection:NewButton(";explode", "Explodes player", function() explode(LocalPlayer) end)
+AdminSection:NewButton(";givetools", "Gives starter tools", function() giveTools(LocalPlayer) end)
+AdminSection:NewButton(";removetools", "Removes starter tools", function() removeTools(LocalPlayer) end)
+AdminSection:NewButton(";jail", "Jails the player", function() jail(LocalPlayer) end)
+AdminSection:NewButton(";unjail", "Unjails the player", function() unjail(LocalPlayer) end)
+AdminSection:NewButton(";god mode", "Enables god mode", function() godMode(LocalPlayer) end)
+AdminSection:NewButton(";ungod mode", "Disables god mode", function() ungodMode(LocalPlayer) end)
+AdminSection:NewButton(";kick", "Kicks the player", function() kick(LocalPlayer) end)
+AdminSection:NewButton(";admin", "Gives admin access", function() admin(LocalPlayer) end)
+AdminSection:NewButton(";unadmin", "Revokes admin access", function() unadmin(LocalPlayer) end)
+AdminSection:NewButton(";die", "Forces character to die", function() kill(LocalPlayer) end)
+AdminSection:NewButton(";setspawn", "Sets spawn location", function()
+    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        LocalPlayer.RespawnLocation = Instance.new("SpawnLocation", game.Workspace)
+        LocalPlayer.RespawnLocation.Position = LocalPlayer.Character.HumanoidRootPart.Position
+    end
+end)
+
+-- Games Section
+local GamesSection = GamesTab:NewSection("Game Scripts")
+local gameScripts = {
+    {"Arsenal", "https://pastebin.com/raw/XYZ123"},
+    {"Blox Fruits", "https://pastebin.com/raw/XYZ456"},
+    {"Tower of Hell", "https://pastebin.com/raw/XYZ789"},
+    {"Murder Mystery 2", "https://pastebin.com/raw/XYZ101"},
+    {"Pet Simulator X", "https://pastebin.com/raw/XYZ202"},
+    {"Adopt Me!", "https://pastebin.com/raw/ABC303"},
+    {"Brookhaven RP", "https://pastebin.com/raw/DEF404"},
+    {"MeepCity", "https://pastebin.com/raw/GHI505"},
+    {"Royale High", "https://pastebin.com/raw/JKL606"},
+    {"Anime Fighters Simulator", "https://pastebin.com/raw/MNO707"},
+    {"Jailbreak", "https://pastebin.com/raw/PQR808"},
+    {"All Star Tower Defense", "https://pastebin.com/raw/STU909"},
+    {"Da Hood", "https://pastebin.com/raw/VWX110"},
+    {"BedWars", "https://pastebin.com/raw/YZA111"},
+    {"Combat Warriors", "https://pastebin.com/raw/BCD112"}
+}
+
+for _, script in pairs(gameScripts) do
+    GamesSection:NewButton(script[1] .. " Script", "Load " .. script[1] .. " hack", function()
+        pcall(function() loadstring(game:HttpGet(script[2]))() end)
+    end)
+end
+
+-- More Section
+local MoreSection = MoreTab:NewSection("Extra Features")
+local moreFeatures = {
+    {"Speed Hack", "https://pastebin.com/raw/ABC123", function() getgenv().Speed = 50 end, function() getgenv().Speed = 16 end},
+    {"God Mode", "https://pastebin.com/raw/ABC456", function() godMode(LocalPlayer) end, function() ungodMode(LocalPlayer) end},
+    {"Teleport", "https://pastebin.com/raw/ABC789", function() -- teleport code here -- end, function() -- disable code here -- end},
+    {"Gravity Modifier", "https://pastebin.com/raw/ABC101", function() workspace.Gravity = 50 end, function() workspace.Gravity = 196.2 end},
+    {"Infinite Jump", "https://pastebin.com/raw/ABC202", function() getgenv().InfiniteJump = true end, function() getgenv().InfiniteJump = false end},
+    {"WalkSpeed Modifier", "https://pastebin.com/raw/123ABC1", function() LocalPlayer.Character.Humanoid.WalkSpeed = 50 end, function() LocalPlayer.Character.Humanoid.WalkSpeed = 16 end},
+    {"JumpPower Modifier", "https://pastebin.com/raw/456DEF1", function() LocalPlayer.Character.Humanoid.JumpPower = 100 end, function() LocalPlayer.Character.Humanoid.JumpPower = 50 end},
+    {"Character Transparency", "https://pastebin.com/raw/789GHI1", function() invisible(LocalPlayer) end, function() visible(LocalPlayer) end},
+    {"Force Field Toggle", "https://pastebin.com/raw/JKL101", function() forceField(LocalPlayer) end, function() unforceField(LocalPlayer) end},
+    {"Fire Toggle", "https://pastebin.com/raw/MNO202", function() fire(LocalPlayer) end, function() unfire(LocalPlayer) end},
+    {"Smoke Toggle", "https://pastebin.com/raw/PQR303", function() smoke(LocalPlayer) end, function() unsmoke(LocalPlayer) end},
+    {"Mini Head Toggle", "https://pastebin.com/raw/STU404", function() miniHead(LocalPlayer) end, function() normalHead(LocalPlayer) end},
+    {"Big Head Toggle", "https://pastebin.com/raw/VWX505", function() bigHead(LocalPlayer) end, function() normalHead(LocalPlayer) end},
+    {"Trip Toggle", "https://pastebin.com/raw/YZA606", function() trip(LocalPlayer) end, function() LocalPlayer.Character.Humanoid.WalkSpeed = 16 end},
+    {"Sit Toggle", "https://pastebin.com/raw/BCD707", function() sit(LocalPlayer) end, function() LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp) end},
+    {"Freeze Toggle", "https://pastebin.com/raw/EFG808", function() freeze(LocalPlayer) end, function() unfreeze(LocalPlayer) end},
+    {"Explode Toggle", "https://pastebin.com/raw/HIJ909", function() explode(LocalPlayer) end, function() end},
+    {"Give Tools Toggle", "https://pastebin.com/raw/KLM110", function() giveTools(LocalPlayer) end, function() removeTools(LocalPlayer) end},
+    {"Jail Toggle", "https://pastebin.com/raw/QRS112", function() jail(LocalPlayer) end, function() unjail(LocalPlayer) end},
+    {"Admin Toggle", "https://pastebin.com/raw/TUV113", function() admin(LocalPlayer) end, function() unadmin(LocalPlayer) end},
+    {"Zombify Toggle", "https://pastebin.com/raw/WXY114", function() zombify(LocalPlayer) end, function() end}
+}
+
+for _, feature in pairs(moreFeatures) do
+    MoreSection:NewToggle(feature[1], "Toggle " .. feature[1], function(state)
+        if state then
+            if feature[3] then feature[3]() end
+            pcall(function() loadstring(game:HttpGet(feature[2]))() end)
+        else
+            if feature[4] then feature[4]() end
+        end
+    end)
+end
+
+-- Info Section
+local InfoSection = InfoTab:NewSection("Info")
+InfoSection:NewLabel("Admin: Cosmos#5091")
+InfoSection:NewLabel("Live Coordinates Tracking: Enabled")
+local coordsLabel = InfoSection:NewLabel("Coordinates: ")
+local copyButton = InfoSection:NewButton("Copy Coordinates", "Copy current coordinates", function()
+    setclipboard(coordsLabel.Text:sub(14)) -- Remove "Coordinates: "
+end)
+
+InfoSection:NewLabel("Game ID: " .. tostring(game.GameId))
+InfoSection:NewLabel("Current Time: " .. os.date("%X"))
+InfoSection:NewLabel("Current Date: " .. os.date("%x"))
+InfoSection:NewLabel("Total Players: " .. #Players:GetPlayers())
+InfoSection:NewLabel("Your Username: " .. LocalPlayer.Name)
+InfoSection:NewLabel("All Players: " .. table.concat(Players:GetPlayers():map(function(p) return p.Name end), ", "))
+InfoSection:NewLabel("Credits: Cosmos#5091")
+InfoSection:NewLabel("Misc: This UI is designed for admin purposes.")
+
+-- Live Coordinates Update
+coroutine.wrap(function()
+    while true do
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local pos = LocalPlayer.Character.HumanoidRootPart.Position
+            coordsLabel.Text = "Coordinates: " .. string.format("%.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z)
+        end
+        wait(1)
+    end
+end)()
+
+-- UI Reset Function
+-- ... (Previous code remains the same) ...
+
+local function resetUI()
+    Window:Destroy()
+    Window = Library.CreateLib("Welcome To Cosmos Hub - By Cosmos#5091", "DarkTheme")
+    AdminTab = Window:NewTab("Admin Commands")
+    GamesTab = Window:NewTab("Games")
+    MoreTab = Window:NewTab("More")
+    InfoTab = Window:NewTab("Info")
+    -- Recreate all sections and buttons here
+    -- Admin Commands
+    AdminSection = AdminTab:NewSection("Commands")
+    -- ... (Copy code from above to recreate Admin Commands) ...
+    AdminSection:NewToggle("Fly", "Toggle flying ability", function(state)
+        if state then
+            loadstring(game:HttpGet("https://pastebin.com/raw/YwwvHbTq"))()
+        else
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid.PlatformStand = false
+            end
+        end
+    end)
+    AdminSection:NewToggle("ESP", "Toggle ESP for players", function(state)
+        if state then
+            loadstring(game:HttpGet("https://pastebin.com/raw/FsJak6AT"))()
+        else
+            for _, v in pairs(game.CoreGui:GetChildren()) do
+                if v.Name == "ESP" then
+                    v:Destroy()
+                end
+            end
+        end
+    end)
+    AdminSection:NewToggle("Noclip", "Walk through walls", function(state)
+        if state then
+            loadstring(game:HttpGet("https://pastebin.com/raw/MHE8bZVq"))()
+        else
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+            end
+        end
+    end)
+    AdminSection:NewToggle("Aimbot", "Enable aimbot", function(state)
+        if state then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/Aimbot-Script/main/Aimbot%20Script.lua", true))()
+        else
+            getgenv().AimbotSettings = nil
+        end
+    end)
+    AdminSection:NewButton(";jump", "Makes you jump", function() jump(LocalPlayer) end)
+    AdminSection:NewButton(";kill", "Kills the player", function() kill(LocalPlayer) end)
+    AdminSection:NewButton(";loopkill", "Kills a player over and over", function() loopKill(LocalPlayer) end)
+    AdminSection:NewButton(";sparkles", "Adds sparkles effect", function() sparkles(LocalPlayer) end)
+    AdminSection:NewButton(";unsparkles", "Removes sparkles effect", function() unsparkles(LocalPlayer) end)
+    AdminSection:NewButton(";ff", "Creates a force field", function() forceField(LocalPlayer) end)
+    AdminSection:NewButton(";unff", "Removes the force field", function() unforceField(LocalPlayer) end)
+    AdminSection:NewButton(";fire", "Sets player on fire", function() fire(LocalPlayer) end)
+    AdminSection:NewButton(";unfire", "Stops the fire", function() unfire(LocalPlayer) end)
+    AdminSection:NewButton(";smoke", "Adds smoke effect", function() smoke(LocalPlayer) end)
+    AdminSection:NewButton(";unsmoke", "Removes smoke effect", function() unsmoke(LocalPlayer) end)
+    AdminSection:NewButton(";minihead", "Makes head smaller", function() miniHead(LocalPlayer) end)
+    AdminSection:NewButton(";bighead", "Makes head bigger", function() bigHead(LocalPlayer) end)
+    AdminSection:NewButton(";normalhead", "Resets head size", function() normalHead(LocalPlayer) end)
+    AdminSection:NewButton(";trip", "Trips the player", function() trip(LocalPlayer) end)
+    AdminSection:NewButton(";sit", "Forces player to sit", function() sit(LocalPlayer) end)
+    AdminSection:NewButton(";invisible", "Makes player invisible", function() invisible(LocalPlayer) end)
+    AdminSection:NewButton(";visible", "Makes player visible", function() visible(LocalPlayer) end)
+    AdminSection:NewButton(";freeze", "Freezes player", function() freeze(LocalPlayer) end)
+    AdminSection:NewButton(";explode", "Explodes player", function() explode(LocalPlayer) end)
+    AdminSection:NewButton(";givetools", "Gives starter tools", function() giveTools(LocalPlayer) end)
+    AdminSection:NewButton(";removetools", "Removes starter tools", function() removeTools(LocalPlayer) end)
+    AdminSection:NewButton(";jail", "Jails the player", function() jail(LocalPlayer) end)
+    AdminSection:NewButton(";unjail", "Unjails the player", function() unjail(LocalPlayer) end)
+    AdminSection:NewButton(";god mode", "Enables god mode", function() godMode(LocalPlayer) end)
+    AdminSection:NewButton(";ungod mode", "Disables god mode", function() ungodMode(LocalPlayer) end)
+    AdminSection:NewButton(";kick", "Kicks the player", function() kick(LocalPlayer) end)
+    AdminSection:NewButton(";admin", "Gives admin access", function() admin(LocalPlayer) end)
+    AdminSection:NewButton(";unadmin", "Revokes admin access", function() unadmin(LocalPlayer) end)
+    AdminSection:NewButton(";die", "Forces character to die", function() kill(LocalPlayer) end)
+    AdminSection:NewButton(";setspawn", "Sets spawn location", function()
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.RespawnLocation = Instance.new("SpawnLocation", game.Workspace)
+            LocalPlayer.RespawnLocation.Position = LocalPlayer.Character.HumanoidRootPart.Position
+        end
+    end)
+    -- Games Section
+    GamesSection = GamesTab:NewSection("Game Scripts")
+    for _, script in pairs(gameScripts) do
+        GamesSection:NewButton(script[1] .. " Script", "Load " .. script[1] .. " hack", function()
+            pcall(function() loadstring(game:HttpGet(script[2]))() end)
+        end)
+    end
+    -- More Section
+    MoreSection = MoreTab:NewSection("Extra Features")
+    for _, feature in pairs(moreFeatures) do
+        MoreSection:NewToggle(feature[1], "Toggle " .. feature[1], function(state)
+            if state then
+                if feature[3] then feature[3]() end
+                pcall(function() loadstring(game:HttpGet(feature[2]))() end)
+            else
+                if feature[4] then feature[4]() end
+            end
+        end)
+    end
+    -- Info Section
+    InfoSection = InfoTab:NewSection("Info")
+    InfoSection:NewLabel("Admin: Cosmos#5091")
+    InfoSection:NewLabel("Live Coordinates Tracking: Enabled")
+    local coordsLabel = InfoSection:NewLabel("Coordinates: ")
+    local copyButton = InfoSection:NewButton("Copy Coordinates", "Copy current coordinates", function()
+        setclipboard(coordsLabel.Text:sub(14)) -- Remove "Coordinates: "
+    end)
+    InfoSection:NewLabel("Game ID: " .. tostring(game.GameId))
+    InfoSection:NewLabel("Current Time: " .. os.date("%X"))
+    InfoSection:NewLabel("Current Date: " .. os.date("%x"))
+    InfoSection:NewLabel("Total Players: " .. #Players:GetPlayers())
+    InfoSection:NewLabel("Your Username: " .. LocalPlayer.Name)
+    InfoSection:NewLabel("All Players: " .. table.concat(Players:GetPlayers():map(function(p) return p.Name end), ", "))
+    InfoSection:NewLabel("Credits: Cosmos#5091")
+    InfoSection:NewLabel("Misc: This UI is designed for admin purposes.")
+    -- Live Coordinates Update
+    coroutine.wrap(function()
+        while true do
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local pos = LocalPlayer.Character.HumanoidRootPart.Position
+                coordsLabel.Text = "Coordinates: " .. string.format("%.2f, %.2f, %.2f", pos.X, pos.Y, pos.Z)
+            end
+            wait(1)
+        end
+    end)()
+end
+
+-- Reset UI on Character Death/Reset
+LocalPlayer.CharacterAdded:Connect(resetUI)
+            pcall(function()
